@@ -73,7 +73,7 @@ function load_mailbox(mailbox) {
 				date = document.createElement('div');
 
 				// Change email's background-color is it is read or unread
-				if (email.read) {
+				if (email.read && mailbox == 'inbox') {
 					sender.className = "list-group-item col-3 fw-bold list-group-item-dark";
 					subject.className = "list-group-item col-6 text-truncate list-group-item-dark";
 					date.className = "list-group-item col-3 fw-light list-group-item-dark";
