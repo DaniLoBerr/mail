@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function compose_email() {
 
 	// Show compose view and hide other views
-	document.querySelector('#emails-view').style.display = 'none';
+	document.querySelector('#mailbox-view').style.display = 'none';
 	document.querySelector('#compose-view').style.display = 'block';
 
 	// Clear out composition fields
@@ -45,12 +45,12 @@ function display_message(message) {
 function load_mailbox(mailbox) {
 
 	// Show the mailbox and hide other views
-	const emails_view = document.querySelector('#emails-view');
-	emails_view.style.display = 'block';
+	const mailbox_view = document.querySelector('#mailbox-view');
+	mailbox_view.style.display = 'block';
 	document.querySelector('#compose-view').style.display = 'none';
 
 	// Show the mailbox name
-	document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
+	document.querySelector('#mailbox-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
 
 	// Get emails from API
 	fetch(`/emails/${mailbox}`)
@@ -94,7 +94,7 @@ function load_mailbox(mailbox) {
 				email_container.appendChild(subject);
 				email_container.appendChild(date);
 
-				emails_view.appendChild(email_container);
+				mailbox_view.appendChild(email_container);
 			});
 		});
 }
