@@ -1,3 +1,15 @@
 textarea {
     min-height: 400px;
 }
+
+#mailbox-view a {
+    display: block;
+}
+
+#mailbox-view a:hover {
+    cursor: pointer;
+}
+
+#mailbox-view .list-group:hover > * {
+    background-color: #ededed;
+}
