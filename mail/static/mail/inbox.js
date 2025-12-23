@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	load_mailbox('inbox');
 
 	// Add event listener for email submissions
-	document.querySelector('#compose-form').addEventListener('submit', (e) => {
+	document.querySelector('#compose-form').addEventListener('submit', e => {
 		
 		// Prevent redirection when the email is submitted
 		e.preventDefault();
@@ -53,9 +53,24 @@ function display_email(email_id) {
 			// Create email elements
 			const email_container = document.createElement('div');
 			const email_info = document.createElement('ul');
-			const reply_button = document.createElement('button');
+			const actions_container = document.createElement('div');
+			const archive_btn = document.createElement('button');
+			const reply_btn = document.createElement('button');
 			const hr = document.createElement('hr');
 			const body = document.createElement('p');
+
+			// Add event listener to archive email
+			archive_btn.addEventListener('click', () => {
+
+				// Mark email as archived/unarchived
+				fetch(`/emails/${email_id}`, {
+					method: 'PUT',
+					body: JSON.stringify({
+						archived: !email.archived
+					})
+				})
+				.then(() => load_mailbox('inbox'));
+			});
 
 			// Remove bullet points from the list
 			email_info.className = "list-unstyled";
@@ -76,7 +91,9 @@ function display_email(email_id) {
 			recipients_title.className = "fw-bold";
 			subject_title.className = "fw-bold";
 			timestamp_title.className = "fw-bold";
-			reply_button.className = "btn btn-sm btn-outline-primary";
+			actions_container.className = "btn-group btn-group-sm";
+			archive_btn.className = "btn btn-outline-primary";
+			reply_btn.className = "btn btn-outline-primary";
 
 			sender_title.textContent = "From: ";
 			recipients_title.textContent = "To: ";
@@ -85,11 +102,10 @@ function display_email(email_id) {
 
 			const sender_body = document.createTextNode(email.sender);
 			const recipients_body = document.createTextNode(email.recipients);
-			let subject_body;
-			if (email.subject) subject_body = document.createTextNode(email.subject);
-			else subject_body = document.createTextNode('(No subject)');
+			const subject_body = email.subject ? document.createTextNode(email.subject) : document.createTextNode('(No subject)');
 			const timestamp_body = document.createTextNode(email.timestamp);
-			reply_button.textContent = "Reply";
+			archive_btn.textContent = email.archived ? "Unarchive" : "Archive";
+			reply_btn.textContent = "Reply";
 			body.textContent = email.body;
 
 			// Add elements to their containers
@@ -107,8 +123,11 @@ function display_email(email_id) {
 			email_info.appendChild(subject);
 			email_info.appendChild(timestamp);
 
+			actions_container.appendChild(archive_btn);
+			actions_container.appendChild(reply_btn);
+
 			email_container.appendChild(email_info);
-			email_container.appendChild(reply_button);
+			email_container.appendChild(actions_container);
 			email_container.appendChild(hr);
 			email_container.appendChild(body);
 
