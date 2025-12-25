@@ -69,7 +69,23 @@ function display_email(email_id) {
 						archived: !email.archived
 					})
 				})
-				.then(() => load_mailbox('inbox'));
+					.then(() => load_mailbox('inbox'));
+			});
+
+			// Add event listener to reply email
+			reply_btn.addEventListener('click', () => {
+
+				// Load the compose email form
+				compose_email();
+
+				// Prefill fields with the email data
+				document.querySelector('#compose-recipients').value = email.sender;
+				document.querySelector('#compose-subject').value = (
+					email.subject.startsWith('Re: ') ? email.subject : `Re: ${email.subject}`
+				);
+				document.querySelector('#compose-body').value = (
+					`\n\n"On ${email.timestamp} ${email.sender} wrote: \n\n\t${email.body}"`
+				).replaceAll('""', '"');
 			});
 
 			// Remove bullet points from the list
@@ -106,7 +122,12 @@ function display_email(email_id) {
 			const timestamp_body = document.createTextNode(email.timestamp);
 			archive_btn.textContent = email.archived ? "Unarchive" : "Archive";
 			reply_btn.textContent = "Reply";
-			body.textContent = email.body;
+			body.innerHTML = (
+				email.body
+					.replaceAll('"On ', '<div class="email-prefill"><br><br>"On ')
+					.replaceAll('wrote: ', 'wrote: <br><br>')
+					.replaceAll('""', '"</div>')
+			);
 
 			// Add elements to their containers
 			sender.appendChild(sender_title);

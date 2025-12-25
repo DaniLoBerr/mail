@@ -1,5 +1,5 @@
 textarea {
-    min-height: 400px;
+    height: 400px;
 }
 
 #mailbox-view a {
@@ -12,4 +12,8 @@ textarea {
 
 #mailbox-view .list-group:hover > * {
     background-color: #ededed;
+}
+
+.email-prefill {
+    font-style: italic;
 }
